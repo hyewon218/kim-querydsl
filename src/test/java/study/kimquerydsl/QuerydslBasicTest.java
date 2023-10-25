@@ -6,6 +6,7 @@ import static study.kimquerydsl.entity.QMember.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -61,7 +62,6 @@ public class QuerydslBasicTest {
     // Querydsl: 코드(컴파일 시점 오류 발견)
     public void startQuerydsl() {
         // member1을 찾아라.
-        //QMember m = QMember.member;// 기본 인스턴스 사용
 
         Member findMember = queryFactory
             .select(member)
@@ -70,5 +70,27 @@ public class QuerydslBasicTest {
             .fetchOne();
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    // 기본 검색 쿼리
+    public void search() {
+        Member findMember = queryFactory
+            .selectFrom(member)
+            .where(member.username.eq("member1")
+                .and(member.age.between(10, 30)))
+            .fetchOne();
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    // AND 조건을 파라미터로 처리
+    public void searchAndParam() {
+        List<Member> result1 = queryFactory
+            .selectFrom(member)
+            .where(member.username.eq("member1"),
+                member.age.eq(10))
+            .fetch();
+        assertThat(result1.size()).isEqualTo(1);
     }
 }
