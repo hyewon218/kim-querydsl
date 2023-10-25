@@ -1,6 +1,7 @@
 package study.kimquerydsl;
 
 import static org.assertj.core.api.Assertions.*;
+import static study.kimquerydsl.entity.QMember.*;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import study.kimquerydsl.entity.Member;
-import study.kimquerydsl.entity.QMember;
 import study.kimquerydsl.entity.Team;
 
 @SpringBootTest
@@ -61,13 +61,12 @@ public class QuerydslBasicTest {
     // Querydsl: 코드(컴파일 시점 오류 발견)
     public void startQuerydsl() {
         // member1을 찾아라.
-        //JPAQueryFactory queryFactory = new JPAQueryFactory(em);
-        QMember m = new QMember("m");
+        //QMember m = QMember.member;// 기본 인스턴스 사용
 
         Member findMember = queryFactory
-            .select(m)
-            .from(m)
-            .where(m.username.eq("member1"))// 파라미터 바인딩 자동 처리
+            .select(member)
+            .from(member)
+            .where(member.username.eq("member1"))// 파라미터 바인딩 자동 처리
             .fetchOne();
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
