@@ -148,4 +148,33 @@ public class QuerydslBasicTest {
         assertThat(member6.getUsername()).isEqualTo("member6");
         assertThat(memberNull.getUsername()).isNull();
     }
+
+    @Test
+    public void paging1() {
+        // 조회 건수 제한
+        List<Member> result = queryFactory
+            .selectFrom(member)
+            .orderBy(member.username.desc())
+            .offset(1)// 0부터 시작(zero index)
+            .limit(2)// 최대 2건 조회
+            .fetch();
+
+        assertThat(result.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void paging2() {
+        // 전체 조회
+        QueryResults<Member> queryResults = queryFactory
+            .selectFrom(member)
+            .orderBy(member.username.desc())
+            .offset(1)
+            .limit(2)
+            .fetchResults();// count 쿼리가 실행되니 성능상 주의!
+
+        assertThat(queryResults.getTotal()).isEqualTo(4);
+        assertThat(queryResults.getLimit()).isEqualTo(2);
+        assertThat(queryResults.getOffset()).isEqualTo(1);
+        assertThat(queryResults.getResults().size()).isEqualTo(2);
+    }
 }
