@@ -1,12 +1,12 @@
 package study.kimquerydsl;
 
+import static com.querydsl.jpa.JPAExpressions.*;
 import static org.assertj.core.api.Assertions.*;
 import static study.kimquerydsl.entity.QMember.*;
 import static study.kimquerydsl.entity.QTeam.*;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -363,8 +363,7 @@ public class QuerydslBasicTest {
         List<Member> result = queryFactory
             .selectFrom(member)
             .where(member.age.eq(
-                JPAExpressions
-                    .select(memberSub.age.max())
+                select(memberSub.age.max())
                     .from(memberSub)
             ))
             .fetch();
@@ -384,8 +383,7 @@ public class QuerydslBasicTest {
         List<Member> result = queryFactory
             .selectFrom(member)
             .where(member.age.goe(
-                JPAExpressions
-                    .select(memberSub.age.avg())
+                select(memberSub.age.avg())
                     .from(memberSub)
             ))
             .fetch();
@@ -405,8 +403,7 @@ public class QuerydslBasicTest {
         List<Member> result = queryFactory
             .selectFrom(member)
             .where(member.age.in(
-                JPAExpressions
-                    .select(memberSub.age)
+                select(memberSub.age)
                     .from(memberSub)
                     .where(memberSub.age.gt(10)) // gt(~보다 큼)
             ))
@@ -426,8 +423,7 @@ public class QuerydslBasicTest {
 
         List<Tuple> fetch = queryFactory
             .select(member.username,
-                JPAExpressions
-                    .select(memberSub.age.avg())
+                select(memberSub.age.avg())
             ).from(member)
             .from(memberSub)
             .fetch();
@@ -435,8 +431,7 @@ public class QuerydslBasicTest {
         for (Tuple tuple : fetch) {
             System.out.println("username = " + tuple.get(member.username));
             System.out.println("age = " +
-                tuple.get(JPAExpressions
-                            .select(memberSub.age.avg())
+                tuple.get(select(memberSub.age.avg())
                             .from(memberSub)));
         }
     }
