@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import study.kimquerydsl.dto.MemberDto;
+import study.kimquerydsl.dto.QMemberDto;
 import study.kimquerydsl.dto.UserDto;
 import study.kimquerydsl.entity.Member;
 import study.kimquerydsl.entity.QMember;
@@ -606,6 +607,19 @@ public class QuerydslBasicTest {
 
         for (UserDto userDto : result) {
             System.out.println("userDto = " + userDto);
+        }
+    }
+
+    @Test
+    public void findDtoByQueryProjection() {
+        // @QueryProjection 활용
+        List<MemberDto> result = queryFactory
+            .select(new QMemberDto(member.username, member.age)).distinct()
+            .from(member)
+            .fetch();
+
+        for (MemberDto memberDto : result) {
+            System.out.println("memberDto = " + memberDto);
         }
     }
 }
