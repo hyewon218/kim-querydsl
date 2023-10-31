@@ -1,7 +1,6 @@
 spring:
-  #프로파일 설정(샘플 데이터 추가가 테스트 케이스 실행에 영향을 주지 않도록 분리)
   profiles:
-    active: local
+    active: test
   datasource:
     url: jdbc:h2:tcp://localhost/~/querydsl
     username: sa
