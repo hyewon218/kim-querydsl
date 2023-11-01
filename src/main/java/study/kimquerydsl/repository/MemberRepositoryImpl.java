@@ -57,13 +57,16 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
                 member.username,
                 member.age,
                 team.id,
-                team.name))
+                team.name
+            ))
             .from(member)
             .leftJoin(member.team, team)
-            .where(usernameEq(condition.getUsername()),
+            .where(
+                usernameEq(condition.getUsername()),
                 teamNameEq(condition.getTeamName()),
                 ageGoe(condition.getAgeGoe()),
-                ageLoe(condition.getAgeLoe()))
+                ageLoe(condition.getAgeLoe())
+            )
             .fetch();
     }
 
@@ -76,13 +79,16 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
                 member.username,
                 member.age,
                 team.id,
-                team.name))
+                team.name
+            ))
             .from(member)
             .leftJoin(member.team, team)
-            .where(usernameEq(condition.getUsername()),
+            .where(
+                usernameEq(condition.getUsername()),
                 teamNameEq(condition.getTeamName()),
                 ageGoe(condition.getAgeGoe()),
-                ageLoe(condition.getAgeLoe()))
+                ageLoe(condition.getAgeLoe())
+            )
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetchResults();
@@ -128,13 +134,16 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
                 member.username,
                 member.age,
                 team.id,
-                team.name))
+                team.name
+            ))
             .from(member)
             .leftJoin(member.team, team)
-            .where(usernameEq(condition.getUsername()),
+            .where(
+                usernameEq(condition.getUsername()),
                 teamNameEq(condition.getTeamName()),
                 ageGoe(condition.getAgeGoe()),
-                ageLoe(condition.getAgeLoe()))
+                ageLoe(condition.getAgeLoe())
+            )
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
@@ -143,7 +152,8 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
             .select(member)
             .from(member)
             .leftJoin(member.team, team)
-            .where(usernameEq(condition.getUsername()),
+            .where(
+                usernameEq(condition.getUsername()),
                 teamNameEq(condition.getTeamName()),
                 ageGoe(condition.getAgeGoe()),
                 ageLoe(condition.getAgeLoe())

@@ -86,7 +86,8 @@ public class MemberJpaRepository {
                 member.username,
                 member.age,
                 team.id,
-                team.name))
+                team.name
+            ))
             .from(member)
             .leftJoin(member.team, team)
             .where(builder)
@@ -101,10 +102,12 @@ public class MemberJpaRepository {
                 member.username,
                 member.age,
                 team.id,
-                team.name))
+                team.name
+            ))
             .from(member)
             .leftJoin(member.team, team)
-            .where(usernameEq(condition.getUsername()),
+            .where(
+                usernameEq(condition.getUsername()),
                 teamNameEq(condition.getTeamName()),
                 ageGoe(condition.getAgeGoe()),
                 ageLoe(condition.getAgeLoe())
@@ -139,10 +142,12 @@ public class MemberJpaRepository {
         return queryFactory
             .selectFrom(member)
             .leftJoin(member.team, team)
-            .where(usernameEq(condition.getUsername()),
+            .where(
+                usernameEq(condition.getUsername()),
                 teamNameEq(condition.getTeamName()),
                 ageGoe(condition.getAgeGoe()),
-                ageLoe(condition.getAgeLoe()))
+                ageLoe(condition.getAgeLoe())
+            )
             .fetch();
     }
 }
