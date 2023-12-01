@@ -13,6 +13,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -43,7 +44,7 @@ public class QuerydslBasicTest {
 
     @BeforeEach
     public void before() {
-        queryFactory = new JPAQueryFactory(em);
+        queryFactory = new JPAQueryFactory(em); // EntityManager 로 JPAQueryFactory 생성
 
         Team teamA = new Team("teamA");
         Team teamB = new Team("teamB");
@@ -433,10 +434,12 @@ public class QuerydslBasicTest {
         QMember memberSub = new QMember("memberSub");
 
         List<Tuple> fetch = queryFactory
-            .select(member.username,
-                select(memberSub.age.avg())
-            ).from(member)
-            .from(memberSub)
+            .select(
+                    member.username,
+                    select(memberSub.age.avg())
+                    .from(memberSub)
+            )
+            .from(member)
             .fetch();
 
         for (Tuple tuple : fetch) {
@@ -478,6 +481,29 @@ public class QuerydslBasicTest {
     }
 
     @Test
+    public void complexCase2() {
+
+        NumberExpression<Integer> rankPath = new CaseBuilder()
+            .when(member.age.between(0, 20)).then(2)
+            .when(member.age.between(21, 30)).then(1)
+            .otherwise(3);
+
+        List<Tuple> result = queryFactory
+            .select(member.username, member.age, rankPath)
+            .from(member)
+            .orderBy(rankPath.desc())
+            .fetch();
+
+        for (Tuple tuple : result) {
+            String username = tuple.get(member.username);
+            Integer age = tuple.get(member.age);
+            Integer rank = tuple.get(rankPath);
+            System.out.println("username = " + username + " age = " + age + " rank = "
+                + rank);
+        }
+    }
+
+    @Test
     public void constant() {
         // 상수
         List<Tuple> result = queryFactory
@@ -496,7 +522,6 @@ public class QuerydslBasicTest {
         List<String> result = queryFactory
             .select(member.username.concat("_").concat(member.age.stringValue()))
             .from(member)
-            .where(member.username.eq("member1"))
             .fetch();
 
         for (String s : result) {
