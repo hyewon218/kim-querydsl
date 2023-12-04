@@ -6,3 +6,4 @@
 2. [예제 도메인 모델](https://github.com/hyewon218/kim-querydsl/blob/master/docs/02.md)
 3. [기본 문법](https://github.com/hyewon218/kim-querydsl/blob/master/docs/03.md)
 4. [중급 문법](https://github.com/hyewon218/kim-querydsl/blob/master/docs/04.md)
+5. [실무 활용 - 순수 JPA와 Querydsl (1)](https://github.com/hyewon218/kim-querydsl/blob/master/docs/05.md)
